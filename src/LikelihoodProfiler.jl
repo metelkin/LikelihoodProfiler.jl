@@ -1,47 +1,37 @@
-#__precompile__(false)
-"""
-Main module for `LikelihoodProfiler.jl`.
-
-Four functions are exported from this module for public use:
-
-- [`get_endpoint`](@ref). Computes lower or upper endpoints of confidence interval.
-- [`get_interval`](@ref). Computes confidence interval.
-- [`profile`](@ref). Generates the profile function based on `loss_func`
-- [`update_profile_points!`](@ref). Updates confidence interval with likelihood profile points.
-
-"""
 module LikelihoodProfiler
 
-using NLopt, ForwardDiff
-using Calculus
-using LinearAlgebra
+using SciMLBase, PreallocationTools
+using Reexport
+@reexport import SciMLBase: OptimizationFunction, OptimizationProblem, remake
+@reexport using DataFrames
+using LinearAlgebra, DataInterpolations
+using Distributions
+using OptimizationBase 
+import Optimization: deduce_retcode # tmp, waiting for the NLopt fix
 using RecipesBase
-import PlotUtils.adapted_grid
-using ProgressMeter
 
-# include
-include("structures.jl")
-include("get_endpoint.jl")
-include("get_interval.jl")
-include("cico_one_pass.jl")
-include("method_lin_extrapol.jl")
-include("method_quadr_extrapol.jl")
+abstract type AbstractProfile end
+
+struct ParameterProfile <: AbstractProfile end
+#struct FunctionProfile <: AbstractProfile end
+#struct PredictionProfile <: AbstractProfile end
+
+include("problem_interface.jl")
+include("profile_solution.jl")
+include("profile_methods.jl")
+include("profiler_state.jl")
 include("profile.jl")
-include("plot_interval.jl")
-include("show.jl")
-include("get_optimal.jl")
+include("utils.jl")
+include("optprob_utils.jl")
+include("odeprob_utils.jl")
+include("endpoints.jl")
+include("profiler_step.jl")
+include("plotting.jl")
 
-# export
-export get_right_endpoint,
-    get_endpoint,
-    scaling,
-    unscaling,
-    ProfilePoint,
-    EndPoint,
-    ParamIntervalInput,
-    ParamInterval,
-    get_interval,
-    profile,
-    update_profile_points!,
-    get_optimal
-end #module
+export PLProblem, profile
+export FixedStep
+export chi2_quantile
+export OptimizationProfiler, IntegrationProfiler, CICOProfiler
+export get_endpoints, get_stats, get_retcodes, get_obj_level
+
+end #module 
