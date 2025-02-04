@@ -69,7 +69,7 @@ end
 
 # TODO Fix
 
-@testset "JAK2-STAT5 model. Fixed-step OptimizationProfiler with derivative-free optimizer" begin
+@testset "JAK2-STAT5 model. Fixed-step OptimizationProfiler with gradient-based optimizer" begin
   
   idxs = 1:9
   profile_step(p0, i) = abs(p0[i]) * 0.05

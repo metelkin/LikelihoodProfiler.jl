@@ -117,22 +117,3 @@ function jakstat_obj_component(sim,data,σ)
   end
   return loss_i
 end
-
-#=
-optf = OptimizationFunction(loss_func, Optimization.AutoForwardDiff())
-#optf = OptimizationFunction(lsq_func, Optimization.AutoFiniteDiff())
-_prob = OptimizationProblem(optf, p_best, lb=fill(-Inf,p_len), ub=fill(Inf,p_len))
-
-
-maxiters = 1000
-scan_bounds = (1e-4, 1e4)
-Δθ = 0.2
-
-identity_profiler = IntegrationProfiler(integrator=FBDF(autodiff=false), matrix_type=:identity, integrator_opts=(reltol=1e-3, abstol=1e-6, adaptive=false, dt=0.1), gamma = 100.)
-hess_profiler = IntegrationProfiler(integrator=FBDF(autodiff=false), matrix_type=:hessian, integrator_opts=(reltol=1e-3, abstol=1e-6, adaptive=false, dt=0.1), gamma = 1.)
-opt_profiler = OptimizationProfiler(NLopt.LN_NELDERMEAD, (reltol=1e-3,), :fixed, Δθ, maxiters)
-
-@time opt_prof = profile_parameter(_prob, opt_profiler, 1; scan_bounds, verbose=true)
-@time hess_prof = profile_parameter(_prob, hess_profiler, 1; scan_bounds, threashold=threshold, verbose=true)
-@time identity_prof = profile_parameter(_prob, identity_profiler, 1; scan_bounds, threashold=threshold, verbose=true)
-=#
