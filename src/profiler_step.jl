@@ -37,3 +37,13 @@ end
 function compute_next_pars!(profiler::ProfilerState, s::AdaptiveStep)
   #TODO: Implement adaptive step 
 end
+
+##################### HELPER FUNCTIONS #####################
+
+function cut_xguess(xguess::Number, dir::Int, bound::Number)
+  if dir*xguess > dir*bound
+    return bound
+  else
+    return xguess
+  end
+end
